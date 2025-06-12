@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8084
+
+
+jwt:
+  secret: r9fH3v92wIClfjv3uqmzAK5p2dOPgFwRMlE+8+oD84BZoUi5qM0dClfVdPHaB1CdyHY5N5X0fjI=
+
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
