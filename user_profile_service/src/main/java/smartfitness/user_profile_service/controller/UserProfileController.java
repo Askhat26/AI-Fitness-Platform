@@ -1,36 +1,52 @@
 package smartfitness.user_profile_service.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import smartfitness.user_profile_service.dto.UpdateProfileRequestDTO;
-import smartfitness.user_profile_service.dto.UserProfileDTO;
-import smartfitness.user_profile_service.model.UserProfile;
+import smartfitness.user_profile_service.client.AuthClient;
+import smartfitness.user_profile_service.dto.*;
 import smartfitness.user_profile_service.service.UserProfileService;
 
+
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/api/user-profile")
 @RequiredArgsConstructor
 public class UserProfileController {
 
-    private final UserProfileService service;
+    private final UserProfileService userProfileService;
+    private final AuthClient authClient;
 
-    @PostMapping("/create")
-    public ResponseEntity<UserProfile> create(@Valid @RequestBody UserProfileDTO dto) {
-        return ResponseEntity.ok(service.createProfile(dto));
+    @PostMapping
+    public ResponseEntity<UserProfileResponse> createOrUpdate(
+            @RequestBody UserProfileRequest request,
+            @RequestHeader("Authorization") String token) {
+
+        if (!authClient.validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(userProfileService.createOrUpdateProfile(request));
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<UserProfile> update(
-            @PathVariable String email,
-            @Valid @RequestBody UpdateProfileRequestDTO dto) {
-        return ResponseEntity.ok(service.updateUserProfile(email, dto));
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserProfileResponse> updateProfile(
+            @PathVariable String userId,
+            @RequestBody UserProfileRequest request,
+            @RequestHeader("Authorization") String token) {
+
+        if (!authClient.validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(userProfileService.updateProfile(userId, request));
     }
 
-    // NEW: Get user profile by email
-    @GetMapping("/{email}")
-    public ResponseEntity<UserProfile> getProfile(@PathVariable String email) {
-        return ResponseEntity.ok(service.getProfileByEmail(email));
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserProfileResponse> getProfile(
+            @PathVariable String userId,
+            @RequestHeader("Authorization") String token) {
+
+        if (!authClient.validateToken(token)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(userProfileService.getProfile(userId));
     }
 }

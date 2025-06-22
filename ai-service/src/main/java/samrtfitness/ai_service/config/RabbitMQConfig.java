@@ -1,5 +1,6 @@
-package smartfitness.user_profile_service.config;
+package samrtfitness.ai_service.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,15 +9,19 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String EXCHANGE_NAME = "profile.exchange";
 
     @Bean
-    public TopicExchange profileExchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+    public TopicExchange topicExchange() {
+        return new TopicExchange("ai.exchange");
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         return new RabbitTemplate(connectionFactory);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }
