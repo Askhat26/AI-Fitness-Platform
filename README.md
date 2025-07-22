@@ -60,7 +60,7 @@ A modular AI-based fitness backend platform built with **Spring Boot**, supporti
 - Retry, fallback & circuit breaker enabled for Feign calls
 
 ---
-
+```
 📂 Folder Structure
   smartfitness/
 │
@@ -74,4 +74,4 @@ A modular AI-based fitness backend platform built with **Spring Boot**, supporti
 │   ├── config/
 │   └── consumer/
 ├── eureka-server/
-
+```
